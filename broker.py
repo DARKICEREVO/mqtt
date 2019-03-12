@@ -17,7 +17,11 @@ def handle_client(s):
             client_type, payload = txtin.decode('utf-8').split(' ', 1)
             
             if client_type == 'subscribe':
-                ip, topic = payload.split(' ')
+                try:#in case of fail split ( more than format )
+                    ip, topic = payload.split(' ')
+                except:
+                    s.close()
+                    return
                 print(ip, ' subscribe topic: ', topic)
 
                 # check if topic is exists ??
@@ -30,7 +34,11 @@ def handle_client(s):
 
             elif client_type == 'publish':
                     # split data into topic and value
-                ip, topic, value = payload.split(' ')
+                try:#in case of fail split ( more than format )
+                    ip, topic, value = payload.split(' ')
+                except:
+                    s.close()
+                    return
                 print(ip, ' publish topic: ', topic, ' value: ', value)
                     # check if topic is exists ??
                 if topic_client_list.get(topic, False) != False:
