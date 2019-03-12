@@ -15,37 +15,36 @@ def handle_client(s):
         try:
             txtin = s.recv(1024)
             client_type, payload = txtin.decode('utf-8').split(' ', 1)
-            try:
-                if client_type == 'subscribe':
-                    ip, topic = payload.split(' ')
-                    print(ip, ' subscribe topic: ', topic)
+            
+            if client_type == 'subscribe':
+                ip, topic = payload.split(' ')
+                print(ip, ' subscribe topic: ', topic)
 
-                    # check if topic is exists ??
-                    if topic_client_list.get(topic, False) != False:
-                        # append client sckt in topic_client_list
-                        topic_client_list[topic].append(s)
-                    else:
-                        # if there is no topic yet then create in the list
-                        topic_client_list.update({topic: [s]})
-
-                elif client_type == 'publish':
-                    # split data into topic and value
-                    ip, topic, value = payload.split(' ')
-                    print(ip, ' publish topic: ', topic, ' value: ', value)
-                    # check if topic is exists ??
-                    if topic_client_list.get(topic, False) != False:
-                        for client_socket in topic_client_list.get(topic):
-                            client_socket.send(value.encode('utf-8'))
-                    else:
-                        topic_client_list.update({topic: []})
+                # check if topic is exists ??
+                if topic_client_list.get(topic, False) != False:
+                    # append client sckt in topic_client_list
+                    topic_client_list[topic].append(s)
                 else:
-                    break
-            except: 
-                 if topic in topic_client_list.keys():
+                        # if there is no topic yet then create in the list
+                    topic_client_list.update({topic: [s]})
+
+            elif client_type == 'publish':
+                    # split data into topic and value
+                ip, topic, value = payload.split(' ')
+                print(ip, ' publish topic: ', topic, ' value: ', value)
+                    # check if topic is exists ??
+                if topic_client_list.get(topic, False) != False:
+                    for client_socket in topic_client_list.get(topic):
+                        client_socket.send(value.encode('utf-8'))
+                else:
+                    topic_client_list.update({topic: []})
+            else:
+                break
+        except:
+            if topic in topic_client_list.keys():
                     if s in topic_client_list[topic] :
                         topic_client_list[topic].remove(s)
                         break
-        except:
             break
     s.close()
     return

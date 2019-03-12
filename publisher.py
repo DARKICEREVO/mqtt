@@ -19,14 +19,12 @@ def main():
         addr = (ip, PORT)
         try:
             s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
             s.connect(addr)
-            s.send(user_input.encode('utf-8'))
         except:
             print('Cannot connect to {0}'.format(addr[0]))
             sys.exit(0)
         finally:
-            # send message to broker
+            s.send(user_input.encode('utf-8'))
             s.close()
 
 
