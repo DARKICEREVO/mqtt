@@ -38,6 +38,7 @@ def handle_client(s):
                         client_socket.send(value.encode('utf-8'))
                 else:
                     topic_client_list.update({topic: []})
+                s.send(b'-')
             else:
                 break
         except:
@@ -51,7 +52,7 @@ def handle_client(s):
 
 
 def main():
-    addr = ('192.168.43.100', PORT)
+    addr = ('127.0.0.1', PORT)
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.bind(addr)
     s.listen(1)

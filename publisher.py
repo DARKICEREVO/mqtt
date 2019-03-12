@@ -25,6 +25,7 @@ def main():
             sys.exit(0)
         finally:
             s.send(user_input.encode('utf-8'))
+            update_check = s.recv(5)
             s.close()
 
 
