@@ -28,6 +28,9 @@ def main():
     # stay receive subscribed data until keyboard interrupt is raise.
     while True:
         subscribed_data = s.recv(1024)
+        if subscribed_data == b'':
+            print("END")
+            break
         print('{data}'.format(data=subscribed_data.decode('utf-8')))
 
 
